@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body{font-family:Arial, sans-serif; font-size:12px;}
+      .title{font-size:18px; font-weight:700; margin-bottom:8px;}
+      .muted{color:#555;}
+      table{width:100%; border-collapse:collapse; margin-top:10px;}
+      th,td{border:1px solid #ddd; padding:6px; vertical-align:top;}
+      th{background:#f3f4f6; text-align:left;}
+    </style>
+  </head>
+  <body>
+    <div class="title">Ordonnance</div>
+    <div class="muted">Date: {{ ordonnance.date }}</div>
+    <hr />
+
+    <p><strong>Patient:</strong> {{ patient.nom }} {{ patient.prenoms }} ({{ patient.code_patient }})</p>
+    <p><strong>Diagnostic:</strong> {{ ordonnance.diagnostic|default:"-" }}</p>
+    <p><strong>Instructions:</strong> {{ ordonnance.instructions|default:"-" }}</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Médicament</th>
+          <th>Posologie</th>
+          <th>Durée</th>
+          <th>Commentaire</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for l in ordonnance.lignes.all %}
+          <tr>
+            <td>{{ l.medicament }}</td>
+            <td>{{ l.posologie }}</td>
+            <td>{{ l.duree }}</td>
+            <td>{{ l.commentaire }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

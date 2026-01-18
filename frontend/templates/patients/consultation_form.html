@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter consultation{% endblock %}
+
+{% block content %}
+<a class="link" href="/patients/{{ patient.id }}/">Retour</a>
+<h1 class="page-title">Ajouter une consultation</h1>
+
+<div class="card">
+  <form method="post" class="form">
+    {% csrf_token %}
+
+    <div class="grid grid--2">
+      <div class="form__row">
+        <label class="form__label" for="id_date_consultation">Date et heure</label>
+        {{ form.date_consultation }}
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="id_motif">Motif</label>
+        {{ form.motif }}
+      </div>
+    </div>
+
+    <div class="form__row">
+      <label class="form__label" for="id_observation">Observation</label>
+      {{ form.observation }}
+    </div>
+
+    <div class="form__actions">
+      <button class="btn btn--primary" type="submit">Enregistrer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

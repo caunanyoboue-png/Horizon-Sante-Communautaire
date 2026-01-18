@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Conversation{% endblock %}
+
+{% block content %}
+<a class="link" href="/messages/">Retour</a>
+<h1 class="page-title">{{ thread.sujet|default:"Conversation" }}</h1>
+
+<div class="card">
+  <div class="card__title">Participants</div>
+  <div class="card__text">
+    {% for p in thread.participants.all %}
+      {{ p.username }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+  <div class="card__title">Messages</div>
+  {% for m in thread.messages.all %}
+    <div class="kv">
+      <span class="kv__k">{{ m.sender.username }} - {{ m.created_at }}</span>
+      <span class="kv__v"></span>
+    </div>
+    <div class="card__text">{{ m.contenu }}</div>
+  {% empty %}
+    <div class="card__text">Aucun message.</div>
+  {% endfor %}
+</div>
+
+<div class="card" style="margin-top: 16px;">
+  <div class="card__title">Envoyer un message</div>
+  <form method="post" class="form">
+    {% csrf_token %}
+    <div class="form__row">
+      {{ form.contenu }}
+    </div>
+    <div class="form__actions">
+      <button class="btn btn--primary" type="submit">Envoyer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

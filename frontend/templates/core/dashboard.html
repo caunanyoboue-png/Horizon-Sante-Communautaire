@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dash">
+  <section class="dash__main">
+    <div class="dash__top">
+      <div class="dash__top-left">
+        <h1 class="dash__title">Risk Center</h1>
+      </div>
+      <div class="dash__top-right">
+        <div class="dash__filters">
+          <select id="zone" class="dash__select">
+            <option value="">Toutes zones</option>
+            <option value="GRAND_BASSAM">Grand-Bassam</option>
+            <option value="BONOUA">Bonoua</option>
+          </select>
+          <input id="start" class="dash__date" type="date" />
+          <input id="end" class="dash__date" type="date" />
+          <button class="btn btn--primary" id="apply">Appliquer</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash__kpis">
+      <div class="dash__kpi dash__kpi--gauge">
+        <div class="dash__kpi-label">RISK SCORE</div>
+        <div class="dash__gauge" style="--p: 0;">
+          <div class="dash__gauge-inner">
+            <div class="dash__gauge-value" id="kpi-risk">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash__kpi">
+        <div class="dash__kpi-label">Patients</div>
+        <div class="dash__kpi-value" id="kpi-patients">-</div>
+        <div class="dash__kpi-sub">Total</div>
+      </div>
+
+      <div class="dash__kpi">
+        <div class="dash__kpi-label">Consultations</div>
+        <div class="dash__kpi-value" id="kpi-consultations">-</div>
+        <div class="dash__kpi-sub">Période</div>
+      </div>
+
+      <div class="dash__kpi">
+        <div class="dash__kpi-label">RDV (24h)</div>
+        <div class="dash__kpi-value" id="kpi-rdv">-</div>
+        <div class="dash__kpi-sub">À venir</div>
+      </div>
+
+      <div class="dash__kpi">
+        <div class="dash__kpi-label">Perdues de vue</div>
+        <div class="dash__kpi-value" id="kpi-perdues">-</div>
+        <div class="dash__kpi-sub">CPN1 sans CPN2 &gt; 60j</div>
+      </div>
+    </div>
+
+    <div class="dash__card">
+      <div class="dash__card-title">Access Thresholds</div>
+      <div class="dash__thresholds">
+        <div class="dash__th dash__th--red"><span id="th-red">-</span></div>
+        <div class="dash__th dash__th--orange"><span id="th-orange">-</span></div>
+        <div class="dash__th dash__th--yellow"><span id="th-yellow">-</span></div>
+        <div class="dash__th dash__th--green"><span id="th-green">-</span></div>
+      </div>
+      <div class="dash__th-legend">
+        <span class="dash__badge dash__badge--red">CRITICAL</span>
+        <span class="dash__badge dash__badge--orange">HIGH</span>
+        <span class="dash__badge dash__badge--yellow">MEDIUM</span>
+        <span class="dash__badge dash__badge--green">LOW</span>
+      </div>
+    </div>
+
+    <div class="dash__grid">
+      <div class="dash__card">
+        <div class="dash__card-title">Accès &amp; suivi</div>
+        <div class="dash__tabs">
+          <button class="dash__tab dash__tab--active" type="button" data-tab="all">All Threats</button>
+          <button class="dash__tab" type="button" data-tab="suggestions">Threat Suggestions</button>
+        </div>
+        <div class="dash__mini-kpis">
+          <div class="dash__mini">
+            <div class="dash__mini-label">CPN1</div>
+            <div class="dash__mini-value" id="kpi-cpn1">-</div>
+          </div>
+          <div class="dash__mini">
+            <div class="dash__mini-label">CPN2</div>
+            <div class="dash__mini-value" id="kpi-cpn2">-</div>
+          </div>
+          <div class="dash__mini">
+            <div class="dash__mini-label">CPN3</div>
+            <div class="dash__mini-value" id="kpi-cpn3">-</div>
+          </div>
+          <div class="dash__mini">
+            <div class="dash__mini-label">CPN4</div>
+            <div class="dash__mini-value" id="kpi-cpn4">-</div>
+          </div>
+        </div>
+
+        <div class="dash__chart">
+          <canvas id="chart"></canvas>
+        </div>
+      </div>
+
+      <div class="dash__card">
+        <div class="dash__card-head">
+          <div class="dash__card-title">Comparaison par zone</div>
+        </div>
+        <div class="table" id="zone-table">
+          <div class="table__row table__row--head" style="grid-template-columns: 140px 1fr 1fr 1fr 1fr;">
+            <div class="table__cell">Zone</div>
+            <div class="table__cell">Patients</div>
+            <div class="table__cell">Consultations</div>
+            <div class="table__cell">CPN1</div>
+            <div class="table__cell">RDV 24h</div>
+          </div>
+          <div class="table__row" id="zone-table-empty" style="grid-template-columns: 1fr;">
+            <div class="table__cell">Chargement...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash__card">
+      <div class="dash__card-head">
+        <div class="dash__card-title">Critical risk threats</div>
+        <a class="dash__link" href="/patients/">View all threats</a>
+      </div>
+      <div class="dash__list" id="risk-list">
+        <div class="dash__row dash__row--head">
+          <div>Patient</div>
+          <div>Zone</div>
+          <div>Signal</div>
+          <div>Action</div>
+        </div>
+        <div class="dash__row" id="risk-list-empty">
+          <div>Chargement...</div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  (function() {
+    let chart;
+
+    function qs(id){ return document.getElementById(id); }
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    async function loadData(){
+      const zone = qs('zone').value;
+      const start = qs('start').value;
+      const end = qs('end').value;
+
+      const params = new URLSearchParams();
+      if(zone) params.set('zone', zone);
+      if(start) params.set('start', start);
+      if(end) params.set('end', end);
+
+      const res = await fetch('/api/dashboard/summary/?' + params.toString(), {headers:{'Accept':'application/json'}});
+      if(!res.ok){
+        console.error('Dashboard error', res.status);
+        return;
+      }
+      const data = await res.json();
+
+      qs('kpi-patients').textContent = data.kpis.total_patients;
+      qs('kpi-consultations').textContent = data.kpis.total_consultations;
+      qs('kpi-rdv').textContent = data.kpis.rdv_24h;
+      qs('kpi-cpn1').textContent = data.kpis.cpn1;
+      qs('kpi-cpn2').textContent = data.kpis.cpn2;
+      qs('kpi-cpn3').textContent = data.kpis.cpn3;
+      qs('kpi-cpn4').textContent = data.kpis.cpn4;
+      qs('kpi-perdues').textContent = data.kpis.perdues_de_vue;
+
+      const risk = clamp((data.kpis.perdues_de_vue || 0) * 5 + (data.kpis.rdv_24h || 0) * 2, 0, 100);
+      qs('kpi-risk').textContent = String(risk);
+      const gauge = document.querySelector('.dash__gauge');
+      if(gauge) gauge.style.setProperty('--p', risk);
+
+      const total = Math.max(1, (data.kpis.total_patients || 0));
+      const red = clamp(Math.round(((data.kpis.perdues_de_vue || 0) / total) * 100), 0, 100);
+      const orange = clamp(Math.round(((data.kpis.rdv_24h || 0) / total) * 100), 0, 100);
+      const yellow = clamp(Math.round(((data.kpis.cpn1 || 0) / total) * 100), 0, 100);
+      const green = clamp(100 - red - orange - yellow, 0, 100);
+      qs('th-red').textContent = red + '%';
+      qs('th-orange').textContent = orange + '%';
+      qs('th-yellow').textContent = yellow + '%';
+      qs('th-green').textContent = green + '%';
+      const th = document.querySelector('.dash__thresholds');
+      if(th){
+        th.style.setProperty('--red', red);
+        th.style.setProperty('--orange', orange);
+        th.style.setProperty('--yellow', yellow);
+        th.style.setProperty('--green', green);
+      }
+
+      const labels = data.consultations_daily.map(x => x.day);
+      const values = data.consultations_daily.map(x => x.count);
+
+      if(chart) chart.destroy();
+      chart = new Chart(qs('chart'), {
+        type: 'line',
+        data: { labels, datasets: [{ label: 'Consultations', data: values, borderColor: '#0ea5a4', backgroundColor: 'rgba(14,165,164,.2)', tension: .25 }] },
+        options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
+      });
+
+      const table = qs('zone-table');
+      const empty = qs('zone-table-empty');
+      if(empty) empty.remove();
+      const existing = table.querySelectorAll('[data-zone-row="1"]');
+      existing.forEach(n => n.remove());
+
+      (data.zone_stats || []).forEach(function(z){
+        const row = document.createElement('div');
+        row.className = 'table__row';
+        row.setAttribute('data-zone-row','1');
+        row.style.gridTemplateColumns = '140px 1fr 1fr 1fr 1fr';
+        row.innerHTML = `
+          <div class="table__cell">${z.zone}</div>
+          <div class="table__cell">${z.patients}</div>
+          <div class="table__cell">${z.consultations}</div>
+          <div class="table__cell">${z.cpn1}</div>
+          <div class="table__cell">${z.rdv_24h}</div>
+        `;
+        table.appendChild(row);
+      });
+
+      const list = qs('risk-list');
+      const emptyList = qs('risk-list-empty');
+      if(emptyList) emptyList.remove();
+      const existingRows = list.querySelectorAll('[data-risk-row="1"]');
+      existingRows.forEach(n => n.remove());
+
+      const zoneRows = (data.zone_stats || []).slice().sort((a,b) => (b.rdv_24h + b.cpn1) - (a.rdv_24h + a.cpn1));
+      zoneRows.slice(0, 5).forEach(function(z){
+        const row = document.createElement('div');
+        row.className = 'dash__row';
+        row.setAttribute('data-risk-row','1');
+        row.innerHTML = `
+          <div>DEMO</div>
+          <div>${z.zone}</div>
+          <div><span class="dash__pill">CPN1: ${z.cpn1}</span> <span class="dash__pill">RDV 24h: ${z.rdv_24h}</span></div>
+          <div><a class="btn btn--ghost" href="/patients/">Voir</a></div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    qs('apply').addEventListener('click', function(){ loadData(); });
+    loadData();
+  })();
+</script>
+{% endblock %}

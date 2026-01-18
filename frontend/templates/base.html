@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Fondation ADJAHI{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
+  </head>
+  <body class="page">
+    {% if request.user.is_authenticated %}
+      <div class="app" id="appShell">
+        <button class="app__overlay" type="button" data-nav-overlay aria-label="Fermer le menu"></button>
+        <aside class="app__side" aria-label="Navigation">
+          <div class="app__brand">
+            <a class="app__brand-link" href="/">Fondation ADJAHI</a>
+          </div>
+          <nav class="app__menu">
+            <a class="app__item" href="/dashboard/">Dashboard</a>
+            <a class="app__item" href="/patients/">Patients</a>
+            <a class="app__item" href="/community/">Santé communautaire</a>
+            <a class="app__item" href="/reports/">Rapports</a>
+            <a class="app__item" href="/messages/">Messages</a>
+            <a class="app__item" href="/admin/">Admin</a>
+          </nav>
+        </aside>
+
+        <main class="app__main">
+          <header class="app__top">
+            <div class="app__top-left">
+              <button class="nav-toggle" type="button" data-nav-toggle aria-label="Ouvrir le menu" aria-controls="appShell"></button>
+              <a class="app__home" href="/">Accueil</a>
+            </div>
+            <div class="app__top-right">
+              <span class="app__user">{{ request.user.username }}</span>
+              <form method="post" action="/accounts/logout/" class="nav__form">
+                {% csrf_token %}
+                <button type="submit" class="app__logout">Déconnexion</button>
+              </form>
+            </div>
+          </header>
+          <div class="app__content">
+    {% else %}
+      <header class="topbar">
+        <div class="container topbar__inner">
+          <div class="brand">
+            <a class="brand__link" href="/">Fondation ADJAHI</a>
+          </div>
+          <nav class="nav" aria-label="Navigation">
+            <div class="nav__links">
+              <a href="/#apropos" class="nav__link">À propos</a>
+              <a href="/#services" class="nav__link">Services</a>
+              <a href="/#actualites" class="nav__link">Actualités</a>
+              <a href="/#contact" class="nav__link">Contact</a>
+              <a href="/accounts/login/" class="nav__link">Connexion</a>
+            </div>
+            <button class="nav-toggle" type="button" data-public-nav-toggle aria-label="Ouvrir le menu"></button>
+          </nav>
+        </div>
+        <div class="nav__panel" data-public-nav-panel>
+          <div class="container">
+            <a href="/#apropos" class="nav__panel-link">À propos</a>
+            <a href="/#services" class="nav__panel-link">Services</a>
+            <a href="/#actualites" class="nav__panel-link">Actualités</a>
+            <a href="/#contact" class="nav__panel-link">Contact</a>
+            <a href="/accounts/login/" class="nav__panel-link">Connexion</a>
+          </div>
+        </div>
+      </header>
+
+      <main class="main">
+        <div class="container">
+    {% endif %}
+
+          {% block content %}{% endblock %}
+
+    {% if request.user.is_authenticated %}
+          </div>
+        </main>
+      </div>
+    {% else %}
+        </div>
+      </main>
+    {% endif %}
+
+    <script src="/static/js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Nouveau dossier{% endblock %}
+
+{% block content %}
+<a class="link" href="/community/">Retour</a>
+<h1 class="page-title">Nouveau dossier communautaire</h1>
+
+<div class="card">
+  <form method="post" class="form">
+    {% csrf_token %}
+
+    <div class="grid grid--2">
+      <div class="form__row">
+        <label class="form__label">Patient</label>
+        {{ form.patient }}
+      </div>
+      <div class="form__row">
+        <label class="form__label">Pathologie</label>
+        {{ form.pathologie }}
+      </div>
+      <div class="form__row">
+        <label class="form__label">Date diagnostic</label>
+        {{ form.date_diagnostic }}
+      </div>
+      <div class="form__row">
+        <label class="form__label">Statut</label>
+        {{ form.statut }}
+      </div>
+    </div>
+
+    <div class="form__row">
+      <label class="form__label">Notes</label>
+      {{ form.notes }}
+    </div>
+
+    <div class="form__actions">
+      <button class="btn btn--primary" type="submit">Enregistrer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

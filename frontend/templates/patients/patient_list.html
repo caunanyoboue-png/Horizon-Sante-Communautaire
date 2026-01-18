@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Patients - Fondation ADJAHI{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="page-head__left">
+    <h1 class="page-title">Patients</h1>
+    <div class="page-subtitle">Gestion, recherche et suivi des dossiers patients.</div>
+  </div>
+  <div class="page-head__right">
+    <a class="btn btn--primary" href="/patients/nouveau/">Nouveau patient</a>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom: 12px;">
+  <form method="get" class="filters">
+    <div class="filters__main">
+      <div class="filters__field">
+        <label class="form__label" for="id_q">Recherche</label>
+        <input id="id_q" name="q" type="search" value="{{ filters.q }}" placeholder="Code, nom, prenoms, telephone" />
+      </div>
+
+      <div class="filters__field">
+        <label class="form__label" for="id_zone">Zone</label>
+        <select id="id_zone" name="zone">
+          <option value="">Toutes</option>
+          <option value="GRAND_BASSAM" {% if filters.zone == "GRAND_BASSAM" %}selected{% endif %}>Grand-Bassam</option>
+          <option value="BONOUA" {% if filters.zone == "BONOUA" %}selected{% endif %}>Bonoua</option>
+        </select>
+      </div>
+
+      <div class="filters__field">
+        <label class="form__label" for="id_sexe">Sexe</label>
+        <select id="id_sexe" name="sexe">
+          <option value="">Tous</option>
+          <option value="F" {% if filters.sexe == "F" %}selected{% endif %}>Femme</option>
+          <option value="M" {% if filters.sexe == "M" %}selected{% endif %}>Homme</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filters__actions">
+      <button class="btn btn--primary" type="submit">Appliquer</button>
+      <a class="btn btn--ghost" href="/patients/">Reinitialiser</a>
+    </div>
+  </form>
+</div>
+
+<div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 12px;">
+  <div class="kpi">
+    <div class="kpi__label">Total patients</div>
+    <div class="kpi__value">{{ kpi_total|default:"-" }}</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Resultats</div>
+    <div class="kpi__value">{{ kpi_results|default:"-" }}</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Grand-Bassam</div>
+    <div class="kpi__value">{{ kpi_gb|default:"-" }}</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Bonoua</div>
+    <div class="kpi__value">{{ kpi_bon|default:"-" }}</div>
+  </div>
+</div>
+
+<div class="table">
+  <div class="table__row table__row--head">
+    <div class="table__cell">Code</div>
+    <div class="table__cell">Nom</div>
+    <div class="table__cell">Prenoms</div>
+    <div class="table__cell">Zone</div>
+    <div class="table__cell">Telephone</div>
+    <div class="table__cell"></div>
+  </div>
+  {% for p in patients %}
+    <div class="table__row">
+      <div class="table__cell"><strong>{{ p.code_patient }}</strong></div>
+      <div class="table__cell">{{ p.nom }}</div>
+      <div class="table__cell">{{ p.prenoms }}</div>
+      <div class="table__cell">{{ p.get_zone_display }}</div>
+      <div class="table__cell">{{ p.telephone }}</div>
+      <div class="table__cell"><a class="link" href="/patients/{{ p.id }}/">Ouvrir</a></div>
+    </div>
+  {% empty %}
+    <div class="table__row">
+      <div class="table__cell" style="grid-column: 1 / -1;">Aucun patient ne correspond aux filtres.</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

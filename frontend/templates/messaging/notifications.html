@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<a class="link" href="/messages/">Retour</a>
+<h1 class="page-title">Notifications</h1>
+
+<div class="table">
+  <div class="table__row table__row--head" style="grid-template-columns: 140px 1fr 160px 80px;">
+    <div class="table__cell">Type</div>
+    <div class="table__cell">Titre</div>
+    <div class="table__cell">Date</div>
+    <div class="table__cell"></div>
+  </div>
+
+  {% for n in notifications %}
+    <div class="table__row" style="grid-template-columns: 140px 1fr 160px 80px;">
+      <div class="table__cell">{{ n.get_type_display }}</div>
+      <div class="table__cell">{% if n.lu %}{{ n.titre }}{% else %}<strong>{{ n.titre }}</strong>{% endif %}</div>
+      <div class="table__cell">{{ n.created_at }}</div>
+      <div class="table__cell">{% if n.url %}<a class="link" href="{{ n.url }}">Ouvrir</a>{% endif %}</div>
+    </div>
+  {% empty %}
+    <div class="table__row" style="grid-template-columns: 1fr;">
+      <div class="table__cell">Aucune notification.</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

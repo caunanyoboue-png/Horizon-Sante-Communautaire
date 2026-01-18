@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Rapports{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Rapports & Exports</h1>
+
+<div class="grid grid--3">
+  <div class="card">
+    <div class="card__title">Export Patients</div>
+    <div class="card__text">Télécharger la liste des patients (Excel).</div>
+    <div class="page-actions">
+      <a class="btn btn--primary" href="/reports/patients.xlsx">Télécharger</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title">Export Consultations</div>
+    <div class="card__text">Télécharger l'historique des consultations (Excel).</div>
+    <div class="page-actions">
+      <a class="btn btn--primary" href="/reports/consultations.xlsx">Télécharger</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title">Rapport Mensuel</div>
+    <div class="card__text">Génération automatique du rapport du mois en cours (PDF).</div>
+    <div class="page-actions">
+      <a class="btn btn--primary" href="/reports/rapport-mensuel.pdf">Générer PDF</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

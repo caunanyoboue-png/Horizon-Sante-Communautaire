@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Santé communautaire{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Santé communautaire</h1>
+
+<div class="page-actions">
+  <a class="btn btn--primary" href="/community/nouveau/">Nouveau dossier</a>
+</div>
+
+<div class="table">
+  <div class="table__row table__row--head">
+    <div class="table__cell">Patient</div>
+    <div class="table__cell">Pathologie</div>
+    <div class="table__cell">Diagnostic</div>
+    <div class="table__cell">Statut</div>
+    <div class="table__cell"></div>
+  </div>
+
+  {% for d in dossiers %}
+    <div class="table__row" style="grid-template-columns: 1fr 1fr 140px 140px 80px;">
+      <div class="table__cell">{{ d.patient.code_patient }} - {{ d.patient.nom }} {{ d.patient.prenoms }}</div>
+      <div class="table__cell">{{ d.pathologie.nom }}</div>
+      <div class="table__cell">{{ d.date_diagnostic }}</div>
+      <div class="table__cell">{{ d.get_statut_display }}</div>
+      <div class="table__cell"><a class="link" href="/community/{{ d.id }}/">Voir</a></div>
+    </div>
+  {% empty %}
+    <div class="table__row" style="grid-template-columns: 1fr;">
+      <div class="table__cell">Aucun dossier.</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

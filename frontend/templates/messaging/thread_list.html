@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Messages{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Messages</h1>
+
+<div class="page-actions">
+  <a class="btn btn--primary" href="/messages/nouveau/">Nouvelle conversation</a>
+  <a class="btn btn--ghost" href="/notifications/">Notifications</a>
+</div>
+
+<div class="table">
+  <div class="table__row table__row--head" style="grid-template-columns: 1fr 160px 80px;">
+    <div class="table__cell">Sujet</div>
+    <div class="table__cell">Créée</div>
+    <div class="table__cell"></div>
+  </div>
+
+  {% for t in threads %}
+    <div class="table__row" style="grid-template-columns: 1fr 160px 80px;">
+      <div class="table__cell">{{ t.sujet|default:"(sans sujet)" }}</div>
+      <div class="table__cell">{{ t.created_at }}</div>
+      <div class="table__cell"><a class="link" href="/messages/{{ t.id }}/">Ouvrir</a></div>
+    </div>
+  {% empty %}
+    <div class="table__row" style="grid-template-columns: 1fr;">
+      <div class="table__cell">Aucune conversation.</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

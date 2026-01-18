@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter rendez-vous{% endblock %}
+
+{% block content %}
+<a class="link" href="/patients/{{ patient.id }}/">Retour</a>
+<h1 class="page-title">Ajouter un rendez-vous</h1>
+
+<div class="card">
+  <form method="post" class="form">
+    {% csrf_token %}
+
+    <div class="grid grid--2">
+      <div class="form__row">
+        <label class="form__label" for="id_date_heure">Date et heure</label>
+        {{ form.date_heure }}
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="id_statut">Statut</label>
+        {{ form.statut }}
+      </div>
+    </div>
+
+    <div class="form__row">
+      <label class="form__label" for="id_objet">Objet</label>
+      {{ form.objet }}
+    </div>
+
+    <div class="form__actions">
+      <button class="btn btn--primary" type="submit">Enregistrer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

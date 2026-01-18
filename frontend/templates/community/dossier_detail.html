@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Dossier communautaire{% endblock %}
+
+{% block content %}
+<a class="link" href="/community/">Retour</a>
+<h1 class="page-title">Dossier - {{ dossier.patient.nom }} {{ dossier.patient.prenoms }}</h1>
+
+<div class="page-actions">
+  <a class="btn btn--primary" href="/community/{{ dossier.id }}/suivi/nouveau/">Ajouter suivi</a>
+</div>
+
+<div class="grid grid--2">
+  <div class="card">
+    <div class="card__title">Patient</div>
+    <div class="kv"><span class="kv__k">Code</span><span class="kv__v">{{ dossier.patient.code_patient }}</span></div>
+    <div class="kv"><span class="kv__k">Zone</span><span class="kv__v">{{ dossier.patient.get_zone_display }}</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card__title">Pathologie</div>
+    <div class="kv"><span class="kv__k">Nom</span><span class="kv__v">{{ dossier.pathologie.nom }}</span></div>
+    <div class="kv"><span class="kv__k">Diagnostic</span><span class="kv__v">{{ dossier.date_diagnostic }}</span></div>
+    <div class="kv"><span class="kv__k">Statut</span><span class="kv__v">{{ dossier.get_statut_display }}</span></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <div class="card__title">Notes</div>
+  <div class="card__text">{{ dossier.notes|default:"-" }}</div>
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <div class="card__title">Suivis</div>
+  {% for s in dossier.suivis.all %}
+    <div class="kv"><span class="kv__k">{{ s.date }}</span><span class="kv__v">{{ s.traitement|default:"-" }}</span></div>
+    {% if s.observation %}
+      <div class="card__text">{{ s.observation }}</div>
+    {% endif %}
+  {% empty %}
+    <div class="card__text">Aucun suivi.</div>
+  {% endfor %}
+</div>
+{% endblock %}

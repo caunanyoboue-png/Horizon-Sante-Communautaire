@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}{{ patient.code_patient }} - Patient{% endblock %}
+
+{% block content %}
+<a class="link" href="/patients/">Retour</a>
+<h1 class="page-title">{{ patient.nom }} {{ patient.prenoms }}</h1>
+
+<div class="page-actions">
+  <a class="btn btn--ghost" href="/patients/{{ patient.id }}/modifier/">Modifier</a>
+  <a class="btn btn--ghost" href="/patients/{{ patient.id }}/export.json">Exporter (JSON)</a>
+  <form method="post" action="/patients/{{ patient.id }}/anonymiser/" style="display:inline;">
+    {% csrf_token %}
+    <button class="btn btn--ghost" type="submit">Anonymiser</button>
+  </form>
+  <a class="btn btn--primary" href="/patients/{{ patient.id }}/cpn/nouveau/">Ajouter CPN</a>
+  <a class="btn btn--primary" href="/patients/{{ patient.id }}/rdv/nouveau/">Ajouter RDV</a>
+  <a class="btn btn--primary" href="/patients/{{ patient.id }}/consultations/nouveau/">Ajouter consultation</a>
+  <a class="btn btn--primary" href="/patients/{{ patient.id }}/ordonnances/nouveau/">Nouvelle ordonnance</a>
+</div>
+
+<div class="grid grid--2">
+  <div class="card">
+    <div class="card__title">Identité</div>
+    <div class="kv"><span class="kv__k">Code</span><span class="kv__v">{{ patient.code_patient }}</span></div>
+    <div class="kv"><span class="kv__k">Sexe</span><span class="kv__v">{{ patient.get_sexe_display }}</span></div>
+    <div class="kv"><span class="kv__k">Date de naissance</span><span class="kv__v">{{ patient.date_naissance }}</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card__title">Contact / Zone</div>
+    <div class="kv"><span class="kv__k">Téléphone</span><span class="kv__v">{{ patient.telephone }}</span></div>
+    <div class="kv"><span class="kv__k">Adresse</span><span class="kv__v">{{ patient.adresse }}</span></div>
+    <div class="kv"><span class="kv__k">Zone</span><span class="kv__v">{{ patient.get_zone_display }}</span></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+  <div class="card__title">Antécédents</div>
+  <div class="card__text">{{ patient.antecedents|default:"-" }}</div>
+</div>
+
+<div class="grid grid--2" style="margin-top: 16px;">
+  <div class="card">
+    <div class="card__title">Suivi CPN</div>
+    {% for s in patient.suivis_cpn.all %}
+      <div class="kv"><span class="kv__k">CPN{{ s.numero }}</span><span class="kv__v">{{ s.date }}</span></div>
+    {% empty %}
+      <div class="card__text">Aucun suivi CPN enregistré.</div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="card__title">Rendez-vous</div>
+    {% for r in patient.rendez_vous.all %}
+      <div class="kv"><span class="kv__k">{{ r.date_heure }}</span><span class="kv__v">{{ r.get_statut_display }}</span></div>
+    {% empty %}
+      <div class="card__text">Aucun rendez-vous enregistré.</div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+  <div class="card__title">Consultations</div>
+  {% for c in patient.consultations.all %}
+    <div class="kv">
+      <span class="kv__k">{{ c.date_consultation }}</span>
+      <span class="kv__v">{{ c.motif|default:"-" }}</span>
+    </div>
+    {% if c.observation %}
+      <div class="card__text">{{ c.observation }}</div>
+    {% endif %}
+  {% empty %}
+    <div class="card__text">Aucune consultation enregistrée.</div>
+  {% endfor %}
+</div>
+
+<div class="card" style="margin-top: 16px;">
+  <div class="card__title">Ordonnances</div>
+  {% for o in patient.ordonnances.all %}
+    <div class="kv">
+      <span class="kv__k">{{ o.date }}</span>
+      <span class="kv__v"><a class="link" href="/patients/{{ patient.id }}/ordonnances/{{ o.id }}/">Voir</a></span>
+    </div>
+    {% if o.diagnostic %}
+      <div class="card__text">{{ o.diagnostic }}</div>
+    {% endif %}
+  {% empty %}
+    <div class="card__text">Aucune ordonnance enregistrée.</div>
+  {% endfor %}
+</div>
+{% endblock %}

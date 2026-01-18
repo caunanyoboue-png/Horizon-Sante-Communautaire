@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="auth">
+  <div class="card auth__card">
+    <div class="card__title">Connexion</div>
+
+    {% if form.errors %}
+      <div class="alert">Identifiants invalides. Réessaie.</div>
+    {% endif %}
+
+    <form method="post" class="form">
+      {% csrf_token %}
+      <div class="form__row">
+        <label class="form__label" for="id_username">Nom d'utilisateur</label>
+        {{ form.username }}
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="id_password">Mot de passe</label>
+        {{ form.password }}
+      </div>
+      <button class="btn btn--primary" type="submit">Se connecter</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

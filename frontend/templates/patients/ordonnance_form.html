@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Nouvelle ordonnance{% endblock %}
+
+{% block content %}
+<a class="link" href="/patients/{{ patient.id }}/">Retour</a>
+<h1 class="page-title">Nouvelle ordonnance</h1>
+
+<div class="card">
+  <form method="post" class="form">
+    {% csrf_token %}
+
+    <div class="grid grid--2">
+      <div class="form__row">
+        <label class="form__label" for="id_date">Date</label>
+        {{ ordonnance_form.date }}
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="id_diagnostic">Diagnostic</label>
+        {{ ordonnance_form.diagnostic }}
+      </div>
+    </div>
+
+    <div class="form__row">
+      <label class="form__label" for="id_instructions">Instructions</label>
+      {{ ordonnance_form.instructions }}
+    </div>
+
+    <div class="card" style="margin-top: 12px;">
+      <div class="card__title">Médicaments</div>
+      {{ formset.management_form }}
+      {% for f in formset %}
+        <div class="grid grid--2" style="margin-bottom: 10px;">
+          <div class="form__row">
+            <label class="form__label">Médicament</label>
+            {{ f.medicament }}
+          </div>
+          <div class="form__row">
+            <label class="form__label">Posologie</label>
+            {{ f.posologie }}
+          </div>
+          <div class="form__row">
+            <label class="form__label">Durée</label>
+            {{ f.duree }}
+          </div>
+          <div class="form__row">
+            <label class="form__label">Commentaire</label>
+            {{ f.commentaire }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form__actions">
+      <button class="btn btn--primary" type="submit">Enregistrer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

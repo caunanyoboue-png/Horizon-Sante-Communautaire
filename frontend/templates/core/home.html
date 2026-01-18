@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil - Fondation ADJAHI{% endblock %}
+
+{% block content %}
+<section class="hero" id="top">
+  <div class="hero__text">
+    <h1 class="hero__title">FONDATION ADJAHI</h1>
+    <p class="hero__subtitle">Agir pour une sante communautaire accessible, durable et centree sur les personnes.</p>
+
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="/accounts/login/">Connexion / Espace membres</a>
+      <a class="btn btn--ghost" href="#contact">Nous contacter</a>
+    </div>
+
+    <div class="stats" aria-label="Chiffres clés">
+      <div class="stat">
+        <div class="stat__value">{{ kpi_patients|default:"-" }}</div>
+        <div class="stat__label">Patients suivis</div>
+      </div>
+      <div class="stat">
+        <div class="stat__value">110</div>
+        <div class="stat__label">Agents et volontaires</div>
+      </div>
+      <div class="stat">
+        <div class="stat__value">2</div>
+        <div class="stat__label">Zones (Grand-Bassam, Bonoua)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__card">
+    <div class="card">
+      <div class="card__title">Acces rapide</div>
+      <div class="grid grid--2">
+        <div class="feature">
+          <div class="feature__title">Espace patients</div>
+          <div class="feature__text">Recherche, suivi et historisation des parcours.</div>
+          <div class="page-actions">
+            <a class="btn btn--primary" href="/patients/">Acceder</a>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature__title">Tableau de bord</div>
+          <div class="feature__text">Indicateurs, alertes et pilotage operationnel.</div>
+          <div class="page-actions">
+            <a class="btn btn--ghost" href="/dashboard/">Voir</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="apropos">
+  <div class="section__head">
+    <h2 class="section__title">Presentation de l'ONG</h2>
+    <p class="section__subtitle">Description concise des activites et de la mission de la Fondation.</p>
+  </div>
+
+  <div class="grid grid--2">
+    <div class="card">
+      <div class="card__title">Notre mission</div>
+      <div class="card__text">
+        La FONDATION ADJAHI accompagne les communautes a travers des actions de proximite : sensibilisation, depistage,
+        suivi des patients et orientation vers les services adaptes.
+      </div>
+      <div class="pill-row" aria-label="Zones d'intervention">
+        <span class="pill">Grand-Bassam</span>
+        <span class="pill">Bonoua</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card__title">Zones d'intervention</div>
+      <div class="map" role="img" aria-label="Carte schematique des zones d'intervention">
+        <div class="map__dot map__dot--a"><span class="map__label">Grand-Bassam</span></div>
+        <div class="map__dot map__dot--b"><span class="map__label">Bonoua</span></div>
+      </div>
+      <div class="card__text">Carte interactive possible (phase suivante). Cette vue est une base responsive.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services">
+  <div class="section__head">
+    <h2 class="section__title">Domaines d'action</h2>
+    <p class="section__subtitle">7 axes prioritaires pour renforcer la sante communautaire et l'insertion sociale.</p>
+  </div>
+
+  <div class="grid grid--3">
+    <div class="feature">
+      <div class="feature__title">Sante communautaire</div>
+      <div class="feature__text">Education, prevention et campagnes de proximite.</div>
+    </div>
+    <div class="feature">
+      <div class="feature__title">Mere-enfant</div>
+      <div class="feature__text">Suivi CPN, RDV et continuite des soins.</div>
+    </div>
+    <div class="feature">
+      <div class="feature__title">VIH/Sida</div>
+      <div class="feature__text">Depistage, accompagnement et suivi communautaire.</div>
+    </div>
+    <div class="feature">
+      <div class="feature__title">Tuberculose</div>
+      <div class="feature__text">Detection, orientation et suivi des cas.</div>
+    </div>
+    <div class="feature">
+      <div class="feature__title">Sante mentale</div>
+      <div class="feature__text">Ecoute, orientation et actions de sensibilisation.</div>
+    </div>
+    <div class="feature">
+      <div class="feature__title">Hepatites virales</div>
+      <div class="feature__text">Prevention, depistage et accompagnement.</div>
+    </div>
+    <div class="feature">
+      <div class="feature__title">Insertion sociale</div>
+      <div class="feature__text">Accompagnement, autonomie et integration.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="chiffres">
+  <div class="section__head">
+    <h2 class="section__title">Chiffres cles</h2>
+    <p class="section__subtitle">Statistiques issues de la base de donnees (rafraichies au chargement).</p>
+  </div>
+
+  <div class="kpi-grid" aria-label="Statistiques dynamiques">
+    <div class="kpi">
+      <div class="kpi__label">Patients suivis</div>
+      <div class="kpi__value">{{ kpi_patients|default:"-" }}</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Consultations effectuees</div>
+      <div class="kpi__value">{{ kpi_consultations|default:"-" }}</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Suivis CPN enregistres</div>
+      <div class="kpi__value">{{ kpi_cpn|default:"-" }}</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Cas VIH suivis</div>
+      <div class="kpi__value">{{ kpi_vih|default:"0" }}</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Cas TB suivis</div>
+      <div class="kpi__value">{{ kpi_tb|default:"0" }}</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="temoignages">
+  <div class="section__head">
+    <h2 class="section__title">Temoignages</h2>
+    <p class="section__subtitle">Retours d'experience issus du terrain (confidentialite respectee).</p>
+  </div>
+
+  <div class="grid grid--3">
+    <div class="card">
+      <div class="quote">
+        <div class="quote__text">"Le suivi m'a permis de ne pas manquer mes rendez-vous et d'etre accompagnee."</div>
+        <div class="quote__meta">Patiente, Grand-Bassam</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="quote">
+        <div class="quote__text">"Les campagnes de proximite ameliorent la prevention et l'acces aux soins."</div>
+        <div class="quote__meta">Partenaire local</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="quote">
+        <div class="quote__text">"Une equipe engagee, disponible et a l'ecoute des communautes."</div>
+        <div class="quote__meta">Agent communautaire, Bonoua</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="actualites">
+  <div class="section__head">
+    <h2 class="section__title">Actualites et activites recentes</h2>
+    <p class="section__subtitle">Campagnes, evenements, formations et calendrier des activites.</p>
+  </div>
+
+  <div class="grid grid--2">
+    <div class="card">
+      <div class="card__title">Fil d'actualites</div>
+      <div class="feed">
+        <div class="feed__item">
+          <div class="feed__title">Campagne de sensibilisation sante communautaire</div>
+          <div class="feed__meta">Cette semaine</div>
+        </div>
+        <div class="feed__item">
+          <div class="feed__title">Formation des volontaires (suivi CPN)</div>
+          <div class="feed__meta">Dernier mois</div>
+        </div>
+        <div class="feed__item">
+          <div class="feed__title">Journee de depistage VIH/TB</div>
+          <div class="feed__meta">Prochainement</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card__title">Calendrier</div>
+      <div class="agenda">
+        <div class="agenda__row">
+          <div class="agenda__date">Sam</div>
+          <div class="agenda__body">
+            <div class="agenda__title">Consultations communautaires</div>
+            <div class="agenda__meta">Grand-Bassam</div>
+          </div>
+        </div>
+        <div class="agenda__row">
+          <div class="agenda__date">Mar</div>
+          <div class="agenda__body">
+            <div class="agenda__title">Session de sensibilisation</div>
+            <div class="agenda__meta">Bonoua</div>
+          </div>
+        </div>
+        <div class="agenda__row">
+          <div class="agenda__date">Jeu</div>
+          <div class="agenda__body">
+            <div class="agenda__title">Suivi mere-enfant (CPN)</div>
+            <div class="agenda__meta">Centre de sante partenaire</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="cta">
+    <div class="cta__text">
+      <h2 class="cta__title">Appel a l'action</h2>
+      <p class="cta__subtitle">Devenir membre, faire un don, nous contacter ou acceder a votre espace.</p>
+    </div>
+    <div class="cta__actions">
+      <a class="btn btn--primary" href="/accounts/login/">Acceder a mon espace</a>
+      <a class="btn btn--ghost" href="#contact-details">Nous contacter</a>
+      <a class="btn btn--ghost" href="/accounts/login/">Devenir membre</a>
+      <a class="btn btn--ghost" href="#contact-details">Faire un don</a>
+    </div>
+  </div>
+
+  <footer class="footer" id="contact-details">
+    <div class="grid grid--3">
+      <div class="footer__col">
+        <div class="footer__title">FONDATION ADJAHI</div>
+        <div class="footer__text">Sante communautaire, prevention et accompagnement.</div>
+      </div>
+      <div class="footer__col">
+        <div class="footer__title">Coordonnees</div>
+        <div class="footer__text">Adresse :</div>
+        <div class="footer__text">Telephone :</div>
+        <div class="footer__text">Email :</div>
+      </div>
+      <div class="footer__col">
+        <div class="footer__title">Liens utiles</div>
+        <div class="footer__links">
+          <a class="link" href="#">Mentions legales</a>
+          <a class="link" href="#">Politique de confidentialite</a>
+          <a class="link" href="#">Partenaires</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</section>
+{% endblock %}

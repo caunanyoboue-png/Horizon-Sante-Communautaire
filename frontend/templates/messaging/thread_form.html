@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Nouvelle conversation{% endblock %}
+
+{% block content %}
+<a class="link" href="/messages/">Retour</a>
+<h1 class="page-title">Nouvelle conversation</h1>
+
+<div class="card">
+  <form method="post" class="form">
+    {% csrf_token %}
+
+    <div class="form__row">
+      <label class="form__label">Sujet</label>
+      {{ form.sujet }}
+    </div>
+
+    <div class="form__row">
+      <label class="form__label">Participants</label>
+      {{ form.participants }}
+    </div>
+
+    <div class="form__actions">
+      <button class="btn btn--primary" type="submit">Créer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Patient{% endblock %}
+
+{% block content %}
+<a class="link" href="/patients/">Retour</a>
+<h1 class="page-title">{{ title }}</h1>
+
+<div class="card">
+  <form method="post" class="form">
+    {% csrf_token %}
+
+    <div class="grid grid--2">
+      <div class="form__row">
+        <label class="form__label" for="id_code_patient">Code patient</label>
+        {{ form.code_patient }}
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="id_zone">Zone</label>
+        {{ form.zone }}
+      </div>
+
+      <div class="form__row">
+        <label class="form__label" for="id_nom">Nom</label>
+        {{ form.nom }}
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="id_prenoms">Prénoms</label>
+        {{ form.prenoms }}
+      </div>
+
+      <div class="form__row">
+        <label class="form__label" for="id_sexe">Sexe</label>
+        {{ form.sexe }}
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="id_date_naissance">Date de naissance</label>
+        {{ form.date_naissance }}
+      </div>
+
+      <div class="form__row">
+        <label class="form__label" for="id_telephone">Téléphone</label>
+        {{ form.telephone }}
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="id_adresse">Adresse</label>
+        {{ form.adresse }}
+      </div>
+    </div>
+
+    <div class="form__row">
+      <label class="form__label" for="id_antecedents">Antécédents</label>
+      {{ form.antecedents }}
+    </div>
+
+    <div class="form__actions">
+      <button class="btn btn--primary" type="submit">Enregistrer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

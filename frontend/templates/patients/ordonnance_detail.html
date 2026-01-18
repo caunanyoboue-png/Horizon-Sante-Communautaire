@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Ordonnance{% endblock %}
+
+{% block content %}
+<a class="link" href="/patients/{{ patient.id }}/">Retour</a>
+<h1 class="page-title">Ordonnance du {{ ordonnance.date }}</h1>
+
+<div class="page-actions">
+  <a class="btn btn--primary" href="/patients/{{ patient.id }}/ordonnances/{{ ordonnance.id }}/pdf/">Télécharger PDF</a>
+</div>
+
+<div class="grid grid--2">
+  <div class="card">
+    <div class="card__title">Patient</div>
+    <div class="kv"><span class="kv__k">Code</span><span class="kv__v">{{ patient.code_patient }}</span></div>
+    <div class="kv"><span class="kv__k">Nom</span><span class="kv__v">{{ patient.nom }} {{ patient.prenoms }}</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card__title">Diagnostic / Instructions</div>
+    <div class="card__text"><strong>Diagnostic:</strong> {{ ordonnance.diagnostic|default:"-" }}</div>
+    <div class="card__text"><strong>Instructions:</strong> {{ ordonnance.instructions|default:"-" }}</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+  <div class="card__title">Médicaments</div>
+  {% for l in ordonnance.lignes.all %}
+    <div class="kv"><span class="kv__k">{{ l.medicament }}</span><span class="kv__v">{{ l.posologie }} {{ l.duree }}</span></div>
+    {% if l.commentaire %}
+      <div class="card__text">{{ l.commentaire }}</div>
+    {% endif %}
+  {% empty %}
+    <div class="card__text">Aucune ligne.</div>
+  {% endfor %}
+</div>
+{% endblock %}
