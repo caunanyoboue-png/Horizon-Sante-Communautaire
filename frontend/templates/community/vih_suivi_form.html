@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Suivi VIH{% endblock %}
+
+{% block content %}
+<a class="link" href="/community/{{ dossier.id }}/">Retour</a>
+<h1 class="page-title">Suivi VIH</h1>
+
+<div class="card">
+  <form method="post" class="form">
+    {% csrf_token %}
+
+    <div class="grid grid--2">
+      <div class="form__row">
+        <label class="form__label">Date</label>
+        {{ form.date }}
+      </div>
+      <div class="form__row">
+        <label class="form__label">Traitement</label>
+        {{ form.traitement }}
+      </div>
+    </div>
+
+    <div class="form__row">
+      <label class="form__label">Observation</label>
+      {{ form.observation }}
+    </div>
+
+    <div class="form__actions">
+      <button class="btn btn--primary" type="submit">Enregistrer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+

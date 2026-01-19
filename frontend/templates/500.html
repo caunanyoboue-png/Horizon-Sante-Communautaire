@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="grid--1" style="text-align: center; padding: 4rem;">
+    <h1>500</h1>
+    <h2>Erreur Serveur</h2>
+    <p>Une erreur interne est survenue. Nos équipes ont été notifiées.</p>
+    <a href="{% url 'home' %}" class="btn btn--primary">Retour à l'accueil</a>
+</div>
+{% endblock %}

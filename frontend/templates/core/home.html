@@ -9,7 +9,15 @@
     <p class="hero__subtitle">Agir pour une sante communautaire accessible, durable et centree sur les personnes.</p>
 
     <div class="hero__actions">
-      <a class="btn btn--primary" href="/accounts/login/">Connexion / Espace membres</a>
+      {% if request.user.is_authenticated %}
+        {% if request.user.profil.role == "PATIENT" %}
+             <a class="btn btn--primary" href="/mon-espace/">Mon espace patient</a>
+        {% else %}
+             <a class="btn btn--primary" href="/dashboard/">Accéder au Dashboard</a>
+        {% endif %}
+      {% else %}
+        <a class="btn btn--primary" href="/accounts/login/">Connexion / Espace membres</a>
+      {% endif %}
       <a class="btn btn--ghost" href="#contact">Nous contacter</a>
     </div>
 
@@ -29,27 +37,29 @@
     </div>
   </div>
 
-  <div class="hero__card">
-    <div class="card">
-      <div class="card__title">Acces rapide</div>
-      <div class="grid grid--2">
-        <div class="feature">
-          <div class="feature__title">Espace patients</div>
-          <div class="feature__text">Recherche, suivi et historisation des parcours.</div>
-          <div class="page-actions">
-            <a class="btn btn--primary" href="/patients/">Acceder</a>
+  {% if not request.user.is_authenticated or request.user.profil.role != "PATIENT" %}
+    <div class="hero__card">
+      <div class="card">
+        <div class="card__title">Acces rapide</div>
+        <div class="grid grid--2">
+          <div class="feature">
+            <div class="feature__title">Espace patients</div>
+            <div class="feature__text">Recherche, suivi et historisation des parcours.</div>
+            <div class="page-actions">
+              <a class="btn btn--primary" href="/patients/">Acceder</a>
+            </div>
           </div>
-        </div>
-        <div class="feature">
-          <div class="feature__title">Tableau de bord</div>
-          <div class="feature__text">Indicateurs, alertes et pilotage operationnel.</div>
-          <div class="page-actions">
-            <a class="btn btn--ghost" href="/dashboard/">Voir</a>
+          <div class="feature">
+            <div class="feature__title">Tableau de bord</div>
+            <div class="feature__text">Indicateurs, alertes et pilotage operationnel.</div>
+            <div class="page-actions">
+              <a class="btn btn--ghost" href="/dashboard/">Voir</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  {% endif %}
 </section>
 
 <section class="section" id="apropos">
@@ -259,9 +269,9 @@
       <div class="footer__col">
         <div class="footer__title">Liens utiles</div>
         <div class="footer__links">
-          <a class="link" href="#">Mentions legales</a>
-          <a class="link" href="#">Politique de confidentialite</a>
-          <a class="link" href="#">Partenaires</a>
+          <a class="link" href="/mentions-legales/">Mentions legales</a>
+          <a class="link" href="/politique-confidentialite/">Politique de confidentialite</a>
+          <a class="link" href="/partenaires/">Partenaires</a>
         </div>
       </div>
     </div>

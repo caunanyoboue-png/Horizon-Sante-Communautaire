@@ -5,6 +5,46 @@
 {% block content %}
 <h1 class="page-title">Santé communautaire</h1>
 
+<form method="get" class="filters">
+  <div class="grid grid--4">
+    <div class="form__row">
+      <label class="form__label">Pathologie</label>
+      <select name="pathologie">
+        <option value="">Toutes</option>
+        {% for p in pathologies %}
+          <option value="{{ p.code }}" {% if filters.pathologie == p.code %}selected{% endif %}>{{ p.nom }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form__row">
+      <label class="form__label">Statut</label>
+      <select name="statut">
+        <option value="">Tous</option>
+        {% for value, label in statuts %}
+          <option value="{{ value }}" {% if filters.statut == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form__row">
+      <label class="form__label">Zone</label>
+      <select name="zone">
+        <option value="">Toutes</option>
+        {% for value, label in zones %}
+          <option value="{{ value }}" {% if filters.zone == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form__row">
+      <label class="form__label">Date diagnostic</label>
+      <input type="date" name="date" value="{{ filters.date }}">
+    </div>
+  </div>
+  <div class="form__actions" style="margin-top: 8px;">
+    <button class="btn" type="submit">Filtrer</button>
+    <a class="btn btn--secondary" href="/community/">Réinitialiser</a>
+  </div>
+</form>
+
 <div class="page-actions">
   <a class="btn btn--primary" href="/community/nouveau/">Nouveau dossier</a>
 </div>

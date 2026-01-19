@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Mon espace patient{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Mon espace patient</h1>
+
+<div class="grid grid--2">
+  <div class="card">
+    <div class="card__title">Mes informations</div>
+    <div class="kv"><span class="kv__k">Code patient</span><span class="kv__v">{{ patient.code_patient }}</span></div>
+    <div class="kv"><span class="kv__k">Nom</span><span class="kv__v">{{ patient.nom }} {{ patient.prenoms }}</span></div>
+    <div class="kv"><span class="kv__k">Téléphone</span><span class="kv__v">{{ patient.telephone|default:"-" }}</span></div>
+    <div class="kv"><span class="kv__k">Zone</span><span class="kv__v">{{ patient.get_zone_display }}</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card__title">Prochains rendez-vous</div>
+    {% for r in rdvs %}
+      <div class="kv"><span class="kv__k">{{ r.date_heure }}</span><span class="kv__v">{{ r.objet|default:"Rendez-vous" }}</span></div>
+    {% empty %}
+      <div class="card__text">Aucun rendez-vous planifié.</div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="grid grid--2" style="margin-top:16px;">
+  <div class="card">
+    <div class="card__title">Suivi CPN</div>
+    {% for s in cpn %}
+      <div class="kv"><span class="kv__k">CPN{{ s.numero }}</span><span class="kv__v">{{ s.date }}</span></div>
+    {% empty %}
+      <div class="card__text">Aucun suivi CPN enregistré.</div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="card__title">Consultations récentes</div>
+    {% for c in consultations %}
+      <div class="kv"><span class="kv__k">{{ c.date_consultation }}</span><span class="kv__v">{{ c.motif|default:"Consultation" }}</span></div>
+    {% empty %}
+      <div class="card__text">Aucune consultation récente.</div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <div class="card__title">Suivi communautaire</div>
+  {% for d in dossiers %}
+    <div class="kv"><span class="kv__k">{{ d.pathologie.nom }}</span><span class="kv__v">{{ d.get_statut_display }}</span></div>
+  {% empty %}
+    <div class="card__text">Aucun dossier communautaire.</div>
+  {% endfor %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Statistiques pathologies{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Statistiques par pathologie</h1>
+
+<div class="card">
+  <div class="kv"><span class="kv__k">Taux de suivi</span><span class="kv__v">{{ follow_up_rate|floatformat:2 }}</span></div>
+  <div class="kv"><span class="kv__k">Perdus de vue estimés</span><span class="kv__v">{{ lost_to_follow_up }}</span></div>
+</div>
+
+<div class="table" style="margin-top:16px;">
+  <div class="table__row table__row--head">
+    <div class="table__cell">Pathologie</div>
+    <div class="table__cell">Total dossiers</div>
+    <div class="table__cell">En suivi</div>
+    <div class="table__cell">Stables</div>
+    <div class="table__cell">Terminés</div>
+    <div class="table__cell">Décédés</div>
+  </div>
+
+  {% for row in stats %}
+    <div class="table__row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;">
+      <div class="table__cell">{{ row.pathologie__nom }}</div>
+      <div class="table__cell">{{ row.total }}</div>
+      <div class="table__cell">{{ row.en_suivi }}</div>
+      <div class="table__cell">{{ row.stables }}</div>
+      <div class="table__cell">{{ row.termines }}</div>
+      <div class="table__cell">{{ row.deces }}</div>
+    </div>
+  {% empty %}
+    <div class="table__row" style="grid-template-columns: 1fr;">
+      <div class="table__cell">Aucune donnée disponible.</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
+

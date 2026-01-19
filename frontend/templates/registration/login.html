@@ -20,9 +20,15 @@
       <div class="form__row">
         <label class="form__label" for="id_password">Mot de passe</label>
         {{ form.password }}
+        <div style="text-align: right; margin-top: 0.25rem;">
+          <a href="{% url 'password_reset' %}" style="font-size: 0.8rem; color: var(--primary-color);">Mot de passe oublié ?</a>
+        </div>
       </div>
       <button class="btn btn--primary" type="submit">Se connecter</button>
     </form>
+    <p style="text-align: center; margin-top: 1rem;">
+      Pas encore de compte ? <a href="{% url 'signup' %}">S'inscrire comme patient</a>
+    </p>
   </div>
 </div>
 {% endblock %}

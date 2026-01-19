@@ -15,12 +15,16 @@
             <a class="app__brand-link" href="/">Fondation ADJAHI</a>
           </div>
           <nav class="app__menu">
-            <a class="app__item" href="/dashboard/">Dashboard</a>
-            <a class="app__item" href="/patients/">Patients</a>
-            <a class="app__item" href="/community/">Santé communautaire</a>
-            <a class="app__item" href="/reports/">Rapports</a>
-            <a class="app__item" href="/messages/">Messages</a>
-            <a class="app__item" href="/admin/">Admin</a>
+            {% if request.user.profil.role == "PATIENT" %}
+              <a class="app__item" href="/mon-espace/">Mon espace patient</a>
+            {% else %}
+              <a class="app__item" href="/dashboard/">Dashboard</a>
+              <a class="app__item" href="/patients/">Patients</a>
+              <a class="app__item" href="/community/">Santé communautaire</a>
+              <a class="app__item" href="/reports/">Rapports</a>
+              <a class="app__item" href="/messages/">Messages</a>
+              <a class="app__item" href="/admin/">Admin</a>
+            {% endif %}
           </nav>
         </aside>
 
@@ -28,7 +32,11 @@
           <header class="app__top">
             <div class="app__top-left">
               <button class="nav-toggle" type="button" data-nav-toggle aria-label="Ouvrir le menu" aria-controls="appShell"></button>
-              <a class="app__home" href="/">Accueil</a>
+              {% if request.user.profil.role == "PATIENT" %}
+                <a class="app__home" href="/mon-espace/">Mon espace</a>
+              {% else %}
+                <a class="app__home" href="/dashboard/">Dashboard</a>
+              {% endif %}
             </div>
             <div class="app__top-right">
               <span class="app__user">{{ request.user.username }}</span>
@@ -39,6 +47,15 @@
             </div>
           </header>
           <div class="app__content">
+            {% if messages %}
+              <div class="messages" style="margin-bottom: 1rem;">
+                {% for message in messages %}
+                  <div class="alert alert--{{ message.tags }}" style="padding: 1rem; border-radius: 4px; margin-bottom: 0.5rem; {% if message.tags == 'error' %}background-color: #fde8e8; color: #9b1c1c; border: 1px solid #f8b4b4;{% elif message.tags == 'success' %}background-color: #def7ec; color: #03543f; border: 1px solid #84e1bc;{% endif %}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
     {% else %}
       <header class="topbar">
         <div class="container topbar__inner">
@@ -69,6 +86,15 @@
 
       <main class="main">
         <div class="container">
+          {% if messages %}
+            <div class="messages" style="margin-bottom: 1rem;">
+              {% for message in messages %}
+                <div class="alert alert--{{ message.tags }}" style="padding: 1rem; border-radius: 4px; margin-bottom: 0.5rem; {% if message.tags == 'error' %}background-color: #fde8e8; color: #9b1c1c; border: 1px solid #f8b4b4;{% elif message.tags == 'success' %}background-color: #def7ec; color: #03543f; border: 1px solid #84e1bc;{% endif %}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
     {% endif %}
 
           {% block content %}{% endblock %}
@@ -82,6 +108,38 @@
       </main>
     {% endif %}
 
+    <script>
+      // Simple toggle pour le menu mobile
+      document.addEventListener('DOMContentLoaded', () => {
+        // App Shell Toggle
+        const appToggle = document.querySelector('[data-nav-toggle]');
+        const appSide = document.querySelector('.app__side');
+        const appOverlay = document.querySelector('[data-nav-overlay]');
+        
+        if (appToggle && appSide) {
+          appToggle.addEventListener('click', () => {
+            appSide.classList.toggle('is-open');
+            document.body.classList.toggle('nav-open');
+          });
+          if(appOverlay) {
+             appOverlay.addEventListener('click', () => {
+                appSide.classList.remove('is-open');
+                document.body.classList.remove('nav-open');
+             });
+          }
+        }
+
+        // Public Nav Toggle
+        const pubToggle = document.querySelector('[data-public-nav-toggle]');
+        const pubPanel = document.querySelector('[data-public-nav-panel]');
+        if (pubToggle && pubPanel) {
+          pubToggle.addEventListener('click', () => {
+             const isHidden = pubPanel.style.display === 'none' || !pubPanel.style.display;
+             pubPanel.style.display = isHidden ? 'block' : 'none';
+          });
+        }
+      });
+    </script>
     <script src="/static/js/app.js"></script>
   </body>
 </html>

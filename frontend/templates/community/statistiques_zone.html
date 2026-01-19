@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Statistiques par zone{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Statistiques par zone</h1>
+
+<div class="table">
+  <div class="table__row table__row--head">
+    <div class="table__cell">Zone</div>
+    <div class="table__cell">Total dossiers</div>
+    <div class="table__cell">En suivi</div>
+    <div class="table__cell">Stables</div>
+    <div class="table__cell">Terminés</div>
+    <div class="table__cell">Décédés</div>
+  </div>
+
+  {% for row in zones_stats %}
+    <div class="table__row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;">
+      <div class="table__cell">{{ row.zone_label }}</div>
+      <div class="table__cell">{{ row.total }}</div>
+      <div class="table__cell">{{ row.en_suivi }}</div>
+      <div class="table__cell">{{ row.stables }}</div>
+      <div class="table__cell">{{ row.termines }}</div>
+      <div class="table__cell">{{ row.deces }}</div>
+    </div>
+  {% empty %}
+    <div class="table__row" style="grid-template-columns: 1fr;">
+      <div class="table__cell">Aucune donnée disponible.</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
+

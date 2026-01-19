@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Journal d'audit{% endblock %}
+
+{% block content %}
+  <h1>Journal d'audit</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Utilisateur</th>
+        <th>Action</th>
+        <th>Objet</th>
+        <th>Adresse IP</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+        <tr>
+          <td>{{ log.id }}</td>
+          <td>{{ log.created_at }}</td>
+          <td>{% if log.user %}{{ log.user.username }}{% endif %}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.app_label }}.{{ log.model }} {{ log.object_id }}</td>
+          <td>{{ log.ip_address }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">Aucune entrée d'audit disponible.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p>
+    <a href="{% url 'audit-log-export' %}">Exporter au format CSV</a>
+  </p>
+{% endblock %}
+
