@@ -10,6 +10,7 @@ urlpatterns = [
     path("", include("community.urls")),
     path("", include("reports.urls")),
     path("", include("messaging.urls")),
+    path("", include("audit.urls")),
     path("accounts/", include("accounts.urls")),
     path("api/", include("api.urls")),
 ]

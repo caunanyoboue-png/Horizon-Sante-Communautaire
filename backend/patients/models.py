@@ -1,9 +1,17 @@
+from django.conf import settings
 from django.db import models
 
 
 class Patient(models.Model):
     # Identité
     code_patient = models.CharField(max_length=32, unique=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="patient",
+    )
     nom = models.CharField(max_length=100)
     prenoms = models.CharField(max_length=150)
     date_naissance = models.DateField(null=True, blank=True)
@@ -28,6 +36,7 @@ class Patient(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    date_dernier_acces = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["nom", "prenoms"]

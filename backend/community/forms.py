@@ -19,3 +19,19 @@ class SuiviCommunautaireForm(forms.ModelForm):
         widgets = {
             "date": forms.DateInput(attrs={"type": "date"}),
         }
+
+
+class VIHSuiviForm(SuiviCommunautaireForm):
+    pass
+
+
+class TBSuiviForm(SuiviCommunautaireForm):
+    pass
+
+
+class HepatiteSuiviForm(SuiviCommunautaireForm):
+    pass
+
+
+class SanteMentaleSuiviForm(SuiviCommunautaireForm):
+    pass

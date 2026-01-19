@@ -8,6 +8,7 @@ class Profil(models.Model):
     ROLE_SAGE_FEMME = "SAGE_FEMME"
     ROLE_AGENT = "AGENT_COMMUNAUTAIRE"
     ROLE_PSY = "PSYCHOLOGUE"
+    ROLE_PATIENT = "PATIENT"
 
     ROLE_CHOICES = [
         (ROLE_ADMIN, "Administrateur"),
@@ -15,6 +16,7 @@ class Profil(models.Model):
         (ROLE_SAGE_FEMME, "Sage-femme"),
         (ROLE_AGENT, "Agent communautaire"),
         (ROLE_PSY, "Psychologue"),
+        (ROLE_PATIENT, "Patient"),
     ]
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profil")

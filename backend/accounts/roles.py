@@ -69,6 +69,11 @@ ROLE_DEFINITIONS: list[RoleDefinition] = [
             Consultation: ["add", "view"],
         },
     ),
+    RoleDefinition(
+        code="PATIENT",
+        label="Patient",
+        model_perms={},
+    ),
 ]
 
 

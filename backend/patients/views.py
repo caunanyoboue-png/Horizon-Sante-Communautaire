@@ -32,6 +32,7 @@ def _json_safe(value):
 
 
 @login_required
+@role_required("ADMIN", "MEDECIN", "SAGE_FEMME", "AGENT_COMMUNAUTAIRE", "PSYCHOLOGUE")
 def patient_list(request):
     q = (request.GET.get("q") or "").strip()
     zone = (request.GET.get("zone") or "").strip()
@@ -62,9 +63,42 @@ def patient_list(request):
 
 
 @login_required
+@role_required("ADMIN", "MEDECIN", "SAGE_FEMME", "AGENT_COMMUNAUTAIRE", "PSYCHOLOGUE")
 def patient_detail(request, pk: int):
     patient = get_object_or_404(Patient, pk=pk)
     return render(request, "patients/patient_detail.html", {"patient": patient})
+
+
+@login_required
+def patient_portal_home(request):
+    patient = get_object_or_404(Patient.objects.select_related("user"), user=request.user)
+
+    rdvs = (
+        patient.rendez_vous.all()
+        .order_by("-date_heure")[:5]
+    )
+    consultations = (
+        patient.consultations.all()
+        .order_by("-date_consultation")[:5]
+    )
+    cpn = (
+        patient.suivis_cpn.all()
+        .order_by("numero")
+    )
+    dossiers = (
+        patient.dossiers_communautaires.select_related("pathologie")
+        .all()
+        .order_by("-date_diagnostic")[:5]
+    )
+
+    context = {
+        "patient": patient,
+        "rdvs": rdvs,
+        "consultations": consultations,
+        "cpn": cpn,
+        "dossiers": dossiers,
+    }
+    return render(request, "patients/patient_portal_home.html", context)
 
 
 @login_required
@@ -113,6 +147,8 @@ def cpn_create(request, pk: int):
     return render(request, "patients/cpn_form.html", {"form": form, "patient": patient})
 
 
+from messaging.models import Notification
+
 @login_required
 @role_required("ADMIN", "MEDECIN", "SAGE_FEMME", "AGENT_COMMUNAUTAIRE")
 def rdv_create(request, pk: int):
@@ -124,6 +160,19 @@ def rdv_create(request, pk: int):
             rdv.patient = patient
             rdv.save()
             log_action(request, action=AuditLog.ACTION_CREATE, instance=rdv, extra={"patient_id": patient.pk})
+
+            # Notification au patient si compte lié
+            if patient.user:
+                Notification.objects.create(
+                    user=patient.user,
+                    type=Notification.TYPE_MESSAGE,
+                    titre="Nouveau rendez-vous",
+                    corps=f"Rendez-vous planifié le {rdv.date_heure:%d/%m/%Y à %H:%M} pour : {rdv.objet}",
+                    url="/mon-espace/"
+                )
+                # Simulation SMS
+                print(f"[SMS SIMULATION] To: {patient.telephone} | Msg: RDV le {rdv.date_heure:%d/%m/%Y à %H:%M} - ADJAHI")
+
             return redirect("patient-detail", pk=patient.pk)
     else:
         form = RendezVousForm()
@@ -188,6 +237,7 @@ def ordonnance_create(request, pk: int):
 
 
 @login_required
+@role_required("ADMIN", "MEDECIN", "SAGE_FEMME")
 def ordonnance_detail(request, pk: int, ordonnance_id: int):
     patient = get_object_or_404(Patient, pk=pk)
     ordonnance = get_object_or_404(Ordonnance.objects.prefetch_related("lignes"), pk=ordonnance_id, patient=patient)
@@ -199,6 +249,7 @@ def ordonnance_detail(request, pk: int, ordonnance_id: int):
 
 
 @login_required
+@role_required("ADMIN", "MEDECIN", "SAGE_FEMME")
 def ordonnance_pdf(request, pk: int, ordonnance_id: int):
     patient = get_object_or_404(Patient, pk=pk)
     ordonnance = get_object_or_404(Ordonnance.objects.prefetch_related("lignes"), pk=ordonnance_id, patient=patient)

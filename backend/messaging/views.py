@@ -4,18 +4,21 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from audit.models import AuditLog
 from audit.utils import log_action
+from accounts.permissions import role_required
 
 from .forms import MessageForm, ThreadForm
 from .models import Message, Notification, Thread
 
 
 @login_required
+@role_required("ADMIN", "MEDECIN", "SAGE_FEMME", "AGENT_COMMUNAUTAIRE", "PSYCHOLOGUE")
 def thread_list(request):
     threads = Thread.objects.filter(participants=request.user).order_by("-created_at")
     return render(request, "messaging/thread_list.html", {"threads": threads})
 
 
 @login_required
+@role_required("ADMIN", "MEDECIN", "SAGE_FEMME", "AGENT_COMMUNAUTAIRE", "PSYCHOLOGUE")
 def thread_create(request):
     if request.method == "POST":
         form = ThreadForm(request.POST)
@@ -45,6 +48,7 @@ def thread_create(request):
 
 
 @login_required
+@role_required("ADMIN", "MEDECIN", "SAGE_FEMME", "AGENT_COMMUNAUTAIRE", "PSYCHOLOGUE")
 def thread_detail(request, pk: int):
     thread = get_object_or_404(Thread.objects.prefetch_related("participants", "messages"), pk=pk)
     if not thread.participants.filter(pk=request.user.pk).exists():
@@ -85,6 +89,7 @@ def thread_detail(request, pk: int):
 
 
 @login_required
+@role_required("ADMIN", "MEDECIN", "SAGE_FEMME", "AGENT_COMMUNAUTAIRE", "PSYCHOLOGUE")
 def notifications_list(request):
     notifs = Notification.objects.filter(user=request.user).order_by("-created_at")
     return render(request, "messaging/notifications.html", {"notifications": notifs})

@@ -12,14 +12,29 @@ class SmsSendResult:
 
 
 class SmsProvider:
-    """Provider SMS (stub).
+    """Provider SMS (simulation locale).
 
-    Remplace cette classe par l'intégration d'un fournisseur (Twilio, Orange, MTN, etc.).
+    En dev, écrit les SMS dans un fichier local pour vérification.
+    En prod, remplacer par l'intégration d'un fournisseur (Twilio, Orange, MTN, etc.).
     """
 
     def send_sms(self, phone: str, message: str) -> SmsSendResult:
-        # Ici: stub => on considère l'envoi comme réussi.
-        # Pour un vrai provider: implémenter l'appel API + gestion erreurs.
         if not phone:
             return SmsSendResult(success=False, error="Téléphone manquant")
-        return SmsSendResult(success=True, provider="stub", message_id="stub-message-id")
+        
+        # Simulation d'envoi en écrivant dans un fichier log
+        try:
+            import os
+            from django.utils import timezone
+            
+            log_dir = "logs"
+            if not os.path.exists(log_dir):
+                os.makedirs(log_dir)
+                
+            timestamp = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
+            with open(os.path.join(log_dir, "sms_outbox.log"), "a", encoding="utf-8") as f:
+                f.write(f"[{timestamp}] TO: {phone} | MSG: {message}\n")
+                
+            return SmsSendResult(success=True, provider="local_file", message_id=f"local-{timezone.now().timestamp()}")
+        except Exception as e:
+            return SmsSendResult(success=False, error=str(e))

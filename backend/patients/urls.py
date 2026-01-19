@@ -11,6 +11,7 @@ from .views import (
     patient_detail,
     patient_export_json,
     patient_list,
+    patient_portal_home,
     patient_update,
     rdv_create,
 )
@@ -36,4 +37,5 @@ urlpatterns = [
         ordonnance_pdf,
         name="ordonnance-pdf",
     ),
+    path("mon-espace/", patient_portal_home, name="patient-portal-home"),
 ]

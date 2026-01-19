@@ -9,6 +9,7 @@ class AuditLog(models.Model):
     ACTION_EXPORT = "EXPORT"
     ACTION_LOGIN = "LOGIN"
     ACTION_LOGOUT = "LOGOUT"
+    ACTION_ACCESS = "ACCESS"
 
     ACTION_CHOICES = [
         (ACTION_CREATE, "CREATE"),
@@ -17,6 +18,7 @@ class AuditLog(models.Model):
         (ACTION_EXPORT, "EXPORT"),
         (ACTION_LOGIN, "LOGIN"),
         (ACTION_LOGOUT, "LOGOUT"),
+        (ACTION_ACCESS, "ACCESS"),
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
